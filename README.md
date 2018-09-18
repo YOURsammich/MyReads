@@ -6,6 +6,6 @@ Book managing app made with react
 * npm install
 * npm start
 
-## dependencies
+## Dependencies
 * react
 * react-router
