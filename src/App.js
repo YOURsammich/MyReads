@@ -12,10 +12,34 @@ class BooksApp extends React.Component {
     searchedBooks: []
   }
 
+  assignBookShelf = (shelfedBooks, searchedBooks) => {
+    // assign shelf for searched books
+    const myBookIds = shelfedBooks.map(book => book.id);
+
+    const searchedBooks2 = searchedBooks.map(searchedBook => {
+      const index = myBookIds.indexOf(searchedBook.id);
+
+      // if book is in my book shelf assign shelf value
+      // else set to none
+      if (index !== -1) {
+        searchedBook.shelf = shelfedBooks[index].shelf;
+      } else {
+        searchedBook.shelf = 'none';
+      }
+
+      return searchedBook
+    })
+
+    return searchedBooks2;
+  }
+
   shelfMove = (bookToMove, newShelf) => {
     BooksAPI.update(bookToMove, newShelf)
       .then(() => BooksAPI.getAll())
-      .then(books => this.setState({ books }))
+      .then(books => {
+        const searchedBooks = this.assignBookShelf(books, this.state.searchedBooks)
+        this.setState({ searchedBooks, books })
+      })
     }
 
   searchBooks = (query) => {
@@ -25,6 +49,8 @@ class BooksApp extends React.Component {
         if (searchedBooks.error)
           searchedBooks = []
         
+        searchedBooks = this.assignBookShelf(this.state.books, searchedBooks);
+
         this.setState({ searchedBooks })
       })
   }

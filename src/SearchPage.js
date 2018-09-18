@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import Book from './Book';
-
+import BookShelf from './BookShelf.js';
 
 class SearchPage extends Component {
+    state = {
+      searchedBooks: []
+    }
 
     change = (e) => {
       if (e.target.value) {
@@ -14,14 +16,7 @@ class SearchPage extends Component {
     }
 
     render () {
-      const searchedBooks = this.props.searchedBooks;
-      const shelfedBooks = this.props.shelfedBooks;
-
-      // assign book shelf prop to searched books
-      for (let searchedBook of searchedBooks)
-        for (let shelfedBook of shelfedBooks)
-          if (searchedBook.id === shelfedBook.id)
-            searchedBook.shelf = shelfedBook.shelf
+      const searchedBooks = this.props.searchedBooks
 
       return (
         <div className="search-books">
@@ -40,17 +35,23 @@ class SearchPage extends Component {
             </div>
           </div>
           <div className="search-books-results">
-            <ol className="books-grid">
-              {searchedBooks.length ? (searchedBooks.map(book => (
-                <Book 
-                  key={book.id}
-                  bookData={book}
-                  onBookMove={newBookState => this.props.shelfMove(book, newBookState)}
+            {searchedBooks.length ? (
+              <div>
+                <BookShelf
+                  title="Not your books"
+                  shelfMove={this.props.shelfMove}
+                  books={searchedBooks.filter(book => book.shelf === 'none')} 
                 />
-              ))) : (
-                <div>No results</div>
-              )}
-            </ol>
+
+                <BookShelf
+                  title="Your books"
+                  shelfMove={this.props.shelfMove}
+                  books={searchedBooks.filter(book => book.shelf !== 'none')} 
+                />
+              </div>
+            ) : (
+              <div className="no-results">No results</div>
+            )}
           </div>
         </div>
       )
