@@ -164,6 +164,8 @@ body, .app {
 /* book cover */
 
 .book-cover {
+  width: 128px;
+  height: 188px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
 }
@@ -171,4 +173,13 @@ body, .app {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+.no-cover::before {
+    content: '?';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 100px;
 }
